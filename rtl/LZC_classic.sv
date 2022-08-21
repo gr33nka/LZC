@@ -19,7 +19,7 @@ module LZC_classic #(
       for (j = COUNT-i; j < 2**(COUNT-i); j = j + 1) begin    // block
         base_element_classic bec_i_j #(i) (
           .in(subwire[i-1][i*2*(j+1)-1 : i*2*j]),
-          .out(subwire[i][COUNT*(j+1) : COUNT*j]))
+          .out(subwire[i][COUNT*(j+1) : COUNT*j])
         );
       end
       assign Z[i-1] = subwire[COUNT][COUNT-i];
