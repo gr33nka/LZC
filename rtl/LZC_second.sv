@@ -13,10 +13,9 @@ module LZC_second #(
 
   logic [WIDTH2-1 : 0]  subwire [0:COUNT];
   
-  genvar i, j;
   generate
-    for (i = COUNT; i > 0; i = i - 1) begin                 // level 
-      for (j = COUNT-i; j < 2**(COUNT-i); j = j + 1) begin  // block
+    for (genvar i = COUNT; i > 0; i = i - 1) begin            // level 
+      for (genvar j = 0; j < 2**(COUNT-i); j = j + 1) begin   // block
         base_element_second #(i) bes_i_j (
           .in(subwire[i-1][i*2*(j+1)-1 : i*2*j]),
           .out(subwire[i][(i+1)*(j+1)-1 : (i+1)*j])

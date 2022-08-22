@@ -13,10 +13,9 @@ module LZC_proposed #(
 
   logic [3*WIDTH2/2-1 : 0]  subwire [0:COUNT];
   
-  genvar i, j;
   generate
-    for (i = COUNT; i > 0; i = i - 1) begin                   // level  max -> 1
-      for (j = COUNT-i; j < 2**(COUNT-i); j = j + 1) begin    // block  0 -> max
+    for (genvar i = COUNT; i > 0; i = i - 1) begin             // level  max -> 1
+      for (genvar j = 0; j < 2**(COUNT-i); j = j + 1) begin    // block  0 -> max
         base_element_proposed #(i) bep_i_j (
           .in(subwire[i-1][(4*i-2)*(j+1)-1 : (4*i-2)*j]),
           .out(subwire[i][(2*i+1)*(j+1)-1 : (2*i+1)*j])

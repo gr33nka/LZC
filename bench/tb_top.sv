@@ -1,13 +1,13 @@
-`timescale 1ps / 1ps
+`timescale 1ns / 1ps
 `include "../rtl/LZC_classic.sv"
 `include "../rtl/LZC_proposed.sv"
 `include "../rtl/LZC_second.sv"
 
-`define TIME_SIM #1000
+`define TIME_SIM #3500
 
 module tb_top;
   
-  parameter WIDTH_IN = 32;
+  parameter WIDTH_IN = 64;
   parameter WIDTH2 = 2**$clog2(WIDTH_IN);
   parameter WIDTH_OUT = $clog2(WIDTH2) + 1;
 
@@ -22,8 +22,8 @@ module tb_top;
   logic [WIDTH_OUT-1 : 0] OUT_c;
   logic [WIDTH_OUT-1 : 0] OUT_p;
   logic [WIDTH_OUT-1 : 0] OUT_s;
-  string                  wrong_c = "Classic - GOOD!\t";
-  string                  wrong_p = "Proposed - GOOD!\t";
+  string                  wrong_c = "Classic - GOOD!";
+  string                  wrong_p = "Proposed - GOOD!";
   string                  wrong_s = "Second - GOOD!";
 
 
@@ -68,9 +68,6 @@ module tb_top;
   logic   flag;
 
   always #10 begin
-    //A = $urandom_range(0, 2**WIDTH2 - 1);
-    A = {A[WIDTH2-2:0], ~A[0]};
-
     zeros = 0;
     flag = 0;
     for (i = WIDTH2-1; i >= 0; i = i - 1) begin
@@ -82,26 +79,29 @@ module tb_top;
     
     #10;
     
-    if (OUT_c == zeros) begin
+    if (OUT_c == zeros | &OUT_c) begin
       $display($time,, "---\n\t\t\tA = %h,\tzeros = %d,\tclassic = %d\t%b", A, zeros, OUT_c, OUT_c);
     end else begin
       $display($time,, "---\n\t\t\tA = %h,\tzeros = %d,\tclassic = %b\t<--- BAD!", A, zeros, OUT_c);
       wrong_c = "Classic -- BAD!";
     end
     
-    if (OUT_p == zeros) begin
+    if (OUT_p == zeros | &OUT_p) begin
       $display("\t\t\tA = %h,\tzeros = %d,\tproposed = %d\t%b", A, zeros, OUT_p, OUT_p);
     end else begin 
       $display("\t\t\tA = %h,\tzeros = %d,\tproposed = %b\t<--- BAD!", A, zeros, OUT_p);
       wrong_p = "Proposed -- BAD!";
     end
 
-    if (OUT_s == zeros) begin
+    if (OUT_s == zeros | &OUT_s) begin
       $display("\t\t\tA = %h,\tzeros = %d,\tsecond = %d\t%b\n ", A, zeros, OUT_s, OUT_s);
     end else begin
       $display("\t\t\tA = %h,\tzeros = %d,\tsecond = %b\t<--- BAD!\n ", A, zeros, OUT_s);
       wrong_s = "Second -- BAD!";
     end
+    
+    //A = $urandom_range(0, 2**WIDTH2 - 1);
+    A = {A[WIDTH2-2:0], ~A[0]};
   end
 
 endmodule
