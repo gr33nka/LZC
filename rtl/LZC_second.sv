@@ -5,7 +5,7 @@ module LZC_second #(
   parameter COUNT = $clog2(WIDTH2)
 ) (
   input   logic [WIDTH2-1 : 0]  A,
-  output  logic [COUNT    : 0]  n_Z,
+  output  logic [COUNT-1  : 0]  n_Z,
   output  logic                 n_V
 );
 
@@ -15,11 +15,11 @@ module LZC_second #(
   
   genvar i, j;
   generate
-    for (i = COUNT; i > 0; i = i - 1) begin                   // level 
-      for (j = COUNT-i; j < 2**(COUNT-i); j = j + 1) begin    // block
+    for (i = COUNT; i > 0; i = i - 1) begin                 // level 
+      for (j = COUNT-i; j < 2**(COUNT-i); j = j + 1) begin  // block
         base_element_second #(i) bes_i_j (
           .in(subwire[i-1][i*2*(j+1)-1 : i*2*j]),
-          .out(subwire[i][COUNT*(j+1) : COUNT*j])
+          .out(subwire[i][(i+1)*(j+1)-1 : (i+1)*j])
         );
       end
       assign n_Z[i-1] = subwire[COUNT][COUNT-i];
@@ -38,8 +38,8 @@ module base_element_second #(
   parameter WIDTH_ALL = LEVEL * 2
 ) (
   input   logic [WIDTH_ALL-1 : 0] in,
-  output  logic [LEVEL+1     : 0] out
-  );
+  output  logic [LEVEL       : 0] out
+);
 
   logic [LEVEL-1 : 0] r;
   logic [LEVEL-1 : 0] l;

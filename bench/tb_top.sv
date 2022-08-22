@@ -7,7 +7,7 @@
 
 module tb_top;
   
-  parameter WIDTH_IN = 16;
+  parameter WIDTH_IN = 32;
   parameter WIDTH2 = 2**$clog2(WIDTH_IN);
   parameter WIDTH_OUT = $clog2(WIDTH2) + 1;
 
@@ -55,19 +55,22 @@ module tb_top;
     $dumpvars;
     if (WIDTH_IN != WIDTH2) 
       $display("\n\t\tIncorrect input WIDTH_IN! Was changed on %d bit input A\n", WIDTH2);
-    TIME_SIM;
-    $display("\n\n\t\t\t%s %s %s", wrong_c, wrong_p, wrong_s);
+    `TIME_SIM;
+    #1;
+    $display("\n\n\t\t%s\n\t\t%s\n\t\t%s\n\n", wrong_c, wrong_p, wrong_s);
     $finish;
   end
 
+  initial A = 0;
 
   integer i;
   integer zeros;
   logic   flag;
 
   always #10 begin
-    A = $urandom_range(0, 2**$clog2(WIDTH2) - 1);
-    
+    //A = $urandom_range(0, 2**WIDTH2 - 1);
+    A = {A[WIDTH2-2:0], ~A[0]};
+
     zeros = 0;
     flag = 0;
     for (i = WIDTH2-1; i >= 0; i = i - 1) begin
@@ -77,26 +80,26 @@ module tb_top;
         flag = 1;
     end
     
-    #5;
+    #10;
     
     if (OUT_c == zeros) begin
-      $display($time,, "A = %h,\tzeros = %d,\tclassic = %d", A, zeros, OUT_c);
+      $display($time,, "---\n\t\t\tA = %h,\tzeros = %d,\tclassic = %d\t%b", A, zeros, OUT_c, OUT_c);
     end else begin
-      $display($time,, "A = %h,\tzeros = %d,\tclassic = %d\t<--- BAD!", A, zeros, OUT_c);
-      wrong_c = "Classic -- BAD!\t";
+      $display($time,, "---\n\t\t\tA = %h,\tzeros = %d,\tclassic = %b\t<--- BAD!", A, zeros, OUT_c);
+      wrong_c = "Classic -- BAD!";
     end
     
     if (OUT_p == zeros) begin
-      $display($time,, "A = %h,\tzeros = %d,\tproposed = %d", A, zeros, OUT_p);
+      $display("\t\t\tA = %h,\tzeros = %d,\tproposed = %d\t%b", A, zeros, OUT_p, OUT_p);
     end else begin 
-      $display($time,, "A = %h,\tzeros = %d,\tproposed = %d\t<--- BAD!", A, zeros, OUT_p);
-      wrong_p = "Proposed -- BAD!\t";
+      $display("\t\t\tA = %h,\tzeros = %d,\tproposed = %b\t<--- BAD!", A, zeros, OUT_p);
+      wrong_p = "Proposed -- BAD!";
     end
 
     if (OUT_s == zeros) begin
-      $display($time,, "A = %h,\tzeros = %d,\tsecond = %d", A, zeros, OUT_s);
+      $display("\t\t\tA = %h,\tzeros = %d,\tsecond = %d\t%b\n ", A, zeros, OUT_s, OUT_s);
     end else begin
-      $display($time,, "A = %h,\tzeros = %d,\tsecond = %d\t<--- BAD!", A, zeros, OUT_s);
+      $display("\t\t\tA = %h,\tzeros = %d,\tsecond = %b\t<--- BAD!\n ", A, zeros, OUT_s);
       wrong_s = "Second -- BAD!";
     end
   end

@@ -1,3 +1,6 @@
 .DS_Store
 .vscode
 a.lst
+a.out
+dump.vcd
+*.swp
