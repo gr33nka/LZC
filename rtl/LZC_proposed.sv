@@ -17,9 +17,9 @@ module LZC_proposed #(
   generate
     for (i = COUNT; i > 0; i = i - 1) begin                   // level  max -> 1
       for (j = COUNT-i; j < 2**(COUNT-i); j = j + 1) begin    // block  0 -> max
-        base_element_proposed bep_i_j #(i) (
+        base_element_proposed #(i) bep_i_j (
           .in(subwire[i-1][(4*(i-1)+2)*(j+1) : (4*(i-1)+2)*j]),
-          .out(subwire[i][(2*i+1)*(j+1) : (2*i+1)*j]))
+          .out(subwire[i][(2*i+1)*(j+1) : (2*i+1)*j])
         );
       end
       assign n_Z[COUNT-i] = subwire[COUNT][2*i-1];
@@ -39,7 +39,7 @@ module base_element_proposed #(
 ) (
   input   logic [WIDTH_ALL-1 : 0] in,
   output  logic [LEVEL+1     : 0] out
-  };
+  );
 
   logic [LEVEL-1 : 0] r;
   logic [LEVEL-1 : 0] l;

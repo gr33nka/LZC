@@ -15,9 +15,9 @@ module LZC_classic #(
   
   genvar i, j;
   generate
-    for (i = COUNT; i > 0; i = i - 1) begin                   // level 
-      for (j = COUNT-i; j < 2**(COUNT-i); j = j + 1) begin    // block
-        base_element_classic bec_i_j #(i) (
+    for (i = COUNT; i > 0; i = i - 1) begin :icount                  // level 
+      for (j = COUNT-i; j < 2**(COUNT-i); j = j + 1) begin :jcount   // block
+        base_element_classic #(i) bec_i_j (
           .in(subwire[i-1][i*2*(j+1)-1 : i*2*j]),
           .out(subwire[i][COUNT*(j+1) : COUNT*j])
         );
@@ -39,7 +39,7 @@ module base_element_classic #(
 ) (
   input   logic [WIDTH_ALL-1 : 0] in,
   output  logic [LEVEL+1     : 0] out
-  };
+  );
 
   logic [LEVEL-1 : 0] r;
   logic [LEVEL-1 : 0] l;

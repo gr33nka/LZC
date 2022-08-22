@@ -17,9 +17,9 @@ module LZC_second #(
   generate
     for (i = COUNT; i > 0; i = i - 1) begin                   // level 
       for (j = COUNT-i; j < 2**(COUNT-i); j = j + 1) begin    // block
-        base_element_second bes_i_j #(i) (
+        base_element_second #(i) bes_i_j (
           .in(subwire[i-1][i*2*(j+1)-1 : i*2*j]),
-          .out(subwire[i][COUNT*(j+1) : COUNT*j]))
+          .out(subwire[i][COUNT*(j+1) : COUNT*j])
         );
       end
       assign n_Z[i-1] = subwire[COUNT][COUNT-i];
@@ -39,7 +39,7 @@ module base_element_second #(
 ) (
   input   logic [WIDTH_ALL-1 : 0] in,
   output  logic [LEVEL+1     : 0] out
-  };
+  );
 
   logic [LEVEL-1 : 0] r;
   logic [LEVEL-1 : 0] l;

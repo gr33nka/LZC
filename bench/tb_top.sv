@@ -4,10 +4,10 @@
 `include "../rtl/LZC_second.sv"
 
 `define TIME_SIM #1000
-`define WIDTH_IN 16
 
 module tb_top;
-
+  
+  parameter WIDTH_IN = 16;
   parameter WIDTH2 = 2**$clog2(WIDTH_IN);
   parameter WIDTH_OUT = $clog2(WIDTH2) + 1;
 
@@ -27,19 +27,19 @@ module tb_top;
   string                  wrong_s = "Second - GOOD!";
 
 
-  LZC_classic LZC_c_tb #(WIDTH2) (
+  LZC_classic #(WIDTH2) LZC_c_tb (
     .A(A),
     .Z(Z_c),
     .n_V(V_c)
   );
 
-  LZC_proposed LZC_p_tb #(WIDTH2) (
+  LZC_proposed #(WIDTH2) LZC_p_tb (
     .A(A),
     .n_Z(Z_p),
     .n_V(V_p)
   );
 
-  LZC_second LZC_s_tb #(WIDTH2) (
+  LZC_second #(WIDTH2) LZC_s_tb (
     .A(A),
     .n_Z(Z_s),
     .n_V(V_s)
@@ -70,7 +70,7 @@ module tb_top;
     
     zeros = 0;
     flag = 0;
-    for (i = WIDTH2-1; i >= 0; i = i - 1;) begin
+    for (i = WIDTH2-1; i >= 0; i = i - 1) begin
       if (~flag & ~A[i])
         zeros = zeros + 1;
       else
