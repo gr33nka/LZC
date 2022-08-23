@@ -7,8 +7,8 @@
 
 module tb_top;
   
-  parameter WIDTH_IN = 64;
-  parameter WIDTH2 = 2**$clog2(WIDTH_IN);
+  parameter WIDTH = 64;
+  parameter WIDTH2 = 2**$clog2(WIDTH);
   parameter WIDTH_OUT = $clog2(WIDTH2) + 1;
 
   logic [WIDTH2-1  : 0]   A;
@@ -53,7 +53,7 @@ module tb_top;
 
   initial begin
     $dumpvars;
-    if (WIDTH_IN != WIDTH2) 
+    if (WIDTH != WIDTH2) 
       $display("\n\t\tIncorrect input WIDTH_IN! Was changed on %d bit input A\n", WIDTH2);
     `TIME_SIM;
     #1;
